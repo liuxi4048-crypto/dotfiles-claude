@@ -1,6 +1,9 @@
 # load-repo.ps1
 # 「作業開始」hook: claude-workspaceリポジトリの内容をClaudeに渡す
 
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$OutputEncoding = [System.Text.Encoding]::UTF8
+
 $repoUrl = "https://github.com/liuxi4048-crypto/claude-workspace"
 $repoPath = "$env:USERPROFILE\.claude\workspace\claude-workspace"
 

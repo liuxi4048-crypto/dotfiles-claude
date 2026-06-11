@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -NoProfile -File \"%USERPROFILE%\\.claude\\scripts\\load-repo.ps1\""
+            "command": "chcp 65001 > nul && powershell -NoProfile -Command \"[Console]::OutputEncoding=[System.Text.Encoding]::UTF8; $OutputEncoding=[System.Text.Encoding]::UTF8; & \\\"$env:USERPROFILE\\.claude\\scripts\\load-repo.ps1\\\"\""
           }
         ]
       }
