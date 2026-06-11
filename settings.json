@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -NoProfile -File \"$env:USERPROFILE\\.claude\\scripts\\load-repo.ps1\""
+            "command": "powershell -NoProfile -File \"%USERPROFILE%\\.claude\\scripts\\load-repo.ps1\""
           }
         ]
       }
