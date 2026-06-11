@@ -5,10 +5,13 @@ $claudeDir = "$env:USERPROFILE\.claude"
 
 # Create directory structure
 New-Item -ItemType Directory -Force "$claudeDir\templates\.github\workflows" | Out-Null
+New-Item -ItemType Directory -Force "$claudeDir\scripts" | Out-Null
 
 # Copy files
 Copy-Item "$PSScriptRoot\CLAUDE.md" "$claudeDir\CLAUDE.md" -Force
+Copy-Item "$PSScriptRoot\settings.json" "$claudeDir\settings.json" -Force
 Copy-Item "$PSScriptRoot\templates\.github\workflows\linear-sync.yml" "$claudeDir\templates\.github\workflows\linear-sync.yml" -Force
+Copy-Item "$PSScriptRoot\scripts\load-repo.ps1" "$claudeDir\scripts\load-repo.ps1" -Force
 
 Write-Host "Setup complete. Files copied to $claudeDir"
 Write-Host ""
