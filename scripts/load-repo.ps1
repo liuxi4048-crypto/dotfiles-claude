@@ -1,26 +1,23 @@
 # load-repo.ps1
-# 「作業開始」hook: カレントディレクトリのリポジトリ情報をClaudeに渡す
+# 「作業開始」hook: claude-workspaceリポジトリの内容をClaudeに渡す
 
-$repoPath = (Get-Location).Path
+$repoUrl = "https://github.com/liuxi4048-crypto/claude-workspace"
+$repoPath = "$env:USERPROFILE\.claude\workspace\claude-workspace"
 
-# gitリポジトリでなければスキップ
-$isGit = git -C $repoPath rev-parse --is-inside-work-tree 2>$null
-if (-not $isGit) {
-    Write-Output "【注意】カレントディレクトリはGitリポジトリではありません: $repoPath"
-    exit 0
+# リポジトリをclone or pull
+if (Test-Path "$repoPath\.git") {
+    git -C $repoPath pull --quiet 2>$null
+} else {
+    New-Item -ItemType Directory -Force (Split-Path $repoPath) | Out-Null
+    git clone --quiet $repoUrl $repoPath 2>$null
 }
 
 $output = @()
 $output += "===== 作業開始: リポジトリ情報の自動読み込み ====="
 $output += ""
-
-# リモートURL
-$remoteUrl = git -C $repoPath remote get-url origin 2>$null
-if ($remoteUrl) {
-    $output += "## リポジトリ"
-    $output += $remoteUrl
-    $output += ""
-}
+$output += "## リポジトリ"
+$output += $repoUrl
+$output += ""
 
 # 現在のブランチ
 $branch = git -C $repoPath branch --show-current 2>$null
@@ -34,7 +31,7 @@ $log = git -C $repoPath log --oneline -5 2>$null
 $output += $log
 $output += ""
 
-# ファイルツリー（深さ3まで、node_modules等除外）
+# ファイルツリー
 $output += "## ファイルツリー"
 $tree = git -C $repoPath ls-files | Where-Object {
     $_ -notmatch "^node_modules/" -and
@@ -47,7 +44,7 @@ $tree = git -C $repoPath ls-files | Where-Object {
 $output += $tree
 $output += ""
 
-# 主要ファイルの内容を読み込む
+# 主要ファイルの内容
 $keyFiles = @("README.md", "package.json", "CLAUDE.md", "tsconfig.json", ".env.example")
 foreach ($file in $keyFiles) {
     $fullPath = Join-Path $repoPath $file
