@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "作業開始",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -File \"$env:USERPROFILE\\.claude\\scripts\\load-repo.ps1\""
+          }
+        ]
+      }
+    ]
+  }
+}
